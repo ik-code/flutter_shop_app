@@ -7,14 +7,16 @@ class ProductDetailScreen extends StatelessWidget {
   // ProductDetailScreen(this.title, this.price);
   static const routeName = '/product-detail';
 
+  ProductDetailScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
 
-    final productId = ModalRoute.of(context).settings.arguments as String; // is the id!
+    final productId = ModalRoute.of(context)!.settings.arguments as String; // is the id!
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('title'),
+        title: Text(productId),
       ),
     );
   }
