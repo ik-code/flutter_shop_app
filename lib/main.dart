@@ -18,6 +18,8 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Shop App',
       theme: ThemeData(
         primarySwatch: Colors.brown,
+        accentColor: Colors.deepOrange,
+        fontFamily: 'Lato'
       ),
       home: ProductOverviewScreeen(),
     );
