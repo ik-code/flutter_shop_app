@@ -4,6 +4,8 @@ import '../widgets/product_grid.dart';
 
 
 class ProductOverviewScreeen extends StatelessWidget {
+  const ProductOverviewScreeen({Key? key}) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class ProductOverviewScreeen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Awesome Shop'),
       ),
-      body: ProductsGrid(),
+      body: const ProductsGrid(),
     );
   }
 }

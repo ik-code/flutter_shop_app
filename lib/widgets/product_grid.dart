@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:flutter_shop_app/widgets/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
+  const ProductsGrid({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
@@ -17,7 +19,7 @@ class ProductsGrid extends StatelessWidget {
         products[i].title,
         products[i].imageUrl,
       ),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
         childAspectRatio: 3 / 2,
         crossAxisSpacing: 10,
