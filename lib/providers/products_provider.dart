@@ -40,16 +40,35 @@ class ProductsProvider with ChangeNotifier {
     ),
   ]; //pointer to the memory
 
+  var _showFavoritesOnly = false;
+
   List<Product> get items {
-    return  [ ..._items ];
+    // if (_showFavoritesOnly) {
+    //   return _items.where((prodItem) => prodItem.isFavorite).toList();
+    // }
+    return [..._items];
+  }
+
+  List<Product> get favorieItems {
+       return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void addProduct() {
-    //_items.add(value);
+  void showFavoritesOnly() {
+    _showFavoritesOnly = true;
     notifyListeners();
   }
+
+  // void showAll() {
+  //   _showFavoritesOnly = false;
+  //   notifyListeners();
+  // }
+
+  // void addProduct() {
+  //   //_items.add(value);
+  //   notifyListeners();
+  // }
 }
