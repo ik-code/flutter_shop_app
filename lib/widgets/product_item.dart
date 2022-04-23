@@ -3,6 +3,8 @@ import 'package:flutter_shop_app/providers/product.dart';
 import 'package:flutter_shop_app/screens/product_detail_screen.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/cart_provider.dart';
+
 class ProductItem extends StatelessWidget {
   // final String id;
   // final String title;
@@ -13,7 +15,9 @@ class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
-    print('product rebuilds');
+    final cart = Provider.of<CartProvider>(context,
+        listen:
+            false); // i'm not interested in changes to the cart - listen false. So this widget doesn't rebuild if the cart changes
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -43,7 +47,9 @@ class ProductItem extends StatelessWidget {
           ),
           trailing: IconButton(
             icon: const Icon(Icons.shopping_cart),
-            onPressed: () {},
+            onPressed: () {
+              cart.addItem(product.id, product.price, product.title);
+            },
             color: Theme.of(context).accentColor,
           ),
         ),
