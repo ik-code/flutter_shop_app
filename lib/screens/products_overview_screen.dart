@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_shop_app/screens/cart_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/products_grid.dart';
@@ -20,7 +21,7 @@ class ProductOverviewScreeen extends StatefulWidget {
 class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
   var _showOnlyFavorites = false;
 
-    @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -40,26 +41,28 @@ class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
               Icons.more_vert,
             ),
             itemBuilder: (_) => [
-                  const PopupMenuItem(
-                    child: Text('Only Favorites'),
-                    value: FilterOptions.favorites,
-                  ),
-                  const PopupMenuItem(
-                    child: Text('Show All'),
-                    value: FilterOptions.all,
-                  ),
-                ],
+              const PopupMenuItem(
+                child: Text('Only Favorites'),
+                value: FilterOptions.favorites,
+              ),
+              const PopupMenuItem(
+                child: Text('Show All'),
+                value: FilterOptions.all,
+              ),
+            ],
           ),
           Consumer<CartProvider>(
             builder: (_, cart, ch) => Badge(
-                  child: ch!,
-                  value: cart.itemCount.toString(),
-                ),
+              child: ch!,
+              value: cart.itemCount.toString(),
+            ),
             child: IconButton(
               icon: const Icon(
                 Icons.shopping_cart,
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(CartScreen.routeName);
+              },
             ),
           ),
         ],
