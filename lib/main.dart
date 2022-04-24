@@ -8,7 +8,7 @@ import './screens/products_overview_screen.dart';
 
 import './providers/products_provider.dart';
 
-void main() async{
+void main() async {
   runApp(const MyApp());
 }
 
@@ -20,27 +20,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-      ChangeNotifierProvider.value(
-      value: ProductsProvider(),
-      ),
-       ChangeNotifierProvider.value(
-      value: CartProvider() ,),
-    ], 
+        ChangeNotifierProvider.value(
+          value: ProductsProvider(),
+        ),
+        ChangeNotifierProvider.value(
+          value: CartProvider(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Shop App',
         theme: ThemeData(
-          primarySwatch: Colors.brown,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato'
-        ),
-        home:  const ProductOverviewScreeen(),
+            primarySwatch: Colors.brown,
+            accentColor: Colors.deepOrange,
+            fontFamily: 'Lato'),
+        home: const ProductOverviewScreeen(),
         routes: {
-          ProductDetailScreen.routeName:(context) => const ProductDetailScreen(),
-          CartScreen.routeName: (context) =>  const CartScreen(),    
+          ProductDetailScreen.routeName: (context) =>
+              const ProductDetailScreen(),
+          CartScreen.routeName: (context) => const CartScreen(),
         },
       ),
     );
   }
 }
-
