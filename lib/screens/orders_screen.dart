@@ -3,7 +3,7 @@ import 'package:flutter_shop_app/widgets/app_drawer.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/orders_provider.dart';
-import '../widgets/order_item.dart';
+import '../widgets/order_item_item.dart';
 
 class OrdersScreen extends StatelessWidget {
 
