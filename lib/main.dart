@@ -9,6 +9,7 @@ import './screens/products_overview_screen.dart';
 
 import './providers/products_provider.dart';
 import './screens/orders_screen.dart';
+import './screens/user_products_screen.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Shop App',
         theme: ThemeData(
             primarySwatch: Colors.brown,
-            accentColor: Colors.deepOrange,
             fontFamily: 'Lato'),
         home: const ProductOverviewScreeen(),
         routes: {
@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
               const ProductDetailScreen(),
           CartScreen.routeName: (context) => const CartScreen(),
           OrdersScreen.routeName: (context) => const OrdersScreen(),
+          UserProductsScreen.routeName: (context) => const UserProductsScreen()
         },
       ),
     );
