@@ -22,10 +22,40 @@ class _EditProductScreenState extends State<EditProductScreen> {
   var _editedProduct =
       Product(id: '', title: '', description: '', price: 0, imageUrl: '');
 
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'imageUrl': ''
+  };
+  var _isInit = true;
+
   @override
   void initState() {
     _imageUrlFocusNode.addListener(_updateImageUrl);
     super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute.of(context)!.settings.arguments;
+
+      if (productId != null) {
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+            .findById(productId.toString());
+        _initValues = {
+          'title': _editedProduct.title,
+          'price': _editedProduct.price.toString(),
+          'description': _editedProduct.description,
+          // 'imageUrl': _editedProduct.imageUrl,
+          'imageUrl': ''
+        };
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
@@ -61,9 +91,15 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     //the code is run if isValid = true
     _form.currentState!.save();
-    Provider.of<ProductsProvider>(context, listen: false).addProduct(
-        _editedProduct); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
-    Navigator.of(context).pop();// go back to the previous page which shows us all products
+    if (_editedProduct.id != '') {
+      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_editedProduct.id ,_editedProduct);
+    } else {
+      Provider.of<ProductsProvider>(context, listen: false).addProduct(
+          _editedProduct); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
+    }
+
+    Navigator.of(context)
+        .pop(); // go back to the previous page which shows us all products
   }
 
   @override
@@ -84,6 +120,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
             key: _form,
             child: ListView(children: <Widget>[
               TextFormField(
+                initialValue: _initValues['title'],
                 decoration: const InputDecoration(
                   labelText: 'Title',
                 ),
@@ -103,10 +140,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                       description: _editedProduct.description,
-                      id: '');
+                      id: _editedProduct.id,
+                      isFavorite: _editedProduct.isFavorite);
                 },
               ),
               TextFormField(
+                initialValue: _initValues['price'],
                 decoration: const InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
@@ -132,10 +171,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: double.parse(value!),
                       imageUrl: _editedProduct.imageUrl,
                       description: _editedProduct.description,
-                      id: '');
+                      id: _editedProduct.id,
+                      isFavorite: _editedProduct.isFavorite);
                 },
               ),
               TextFormField(
+                initialValue: _initValues['description'],
                 decoration: const InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 textInputAction: TextInputAction.next,
@@ -156,7 +197,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       price: _editedProduct.price,
                       imageUrl: _editedProduct.imageUrl,
                       description: value.toString(),
-                      id: '');
+                      id: _editedProduct.id,
+                      isFavorite: _editedProduct.isFavorite);
                 },
               ),
               Row(
@@ -213,7 +255,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                             price: _editedProduct.price,
                             imageUrl: value.toString(),
                             description: _editedProduct.description,
-                            id: '');
+                            id: _editedProduct.id,
+                            isFavorite: _editedProduct.isFavorite);
                       },
                     ),
                   ),
