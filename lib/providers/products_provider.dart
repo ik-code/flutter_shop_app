@@ -50,7 +50,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   List<Product> get favorieItems {
-       return _items.where((prodItem) => prodItem.isFavorite).toList();
+    return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 
   Product findById(String id) {
@@ -67,8 +67,16 @@ class ProductsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  // void addProduct() {
-  //   //_items.add(value);
-  //   notifyListeners();
-  // }
+  void addProduct(Product product) {
+    final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: DateTime.now().toString());
+
+    _items.add(newProduct); //at the end of the list
+  // _items.insert(0, newProduct); // at the start of the list
+    notifyListeners();
+  }
 }

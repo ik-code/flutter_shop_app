@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter_shop_app/providers/product.dart';
+import 'package:flutter_shop_app/providers/products_provider.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -40,11 +42,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
   void _updateImageUrl() {
     if (!_imageUrlFocusNode.hasFocus) {
-            if ( (!_imageUrlController.text.startsWith('http') &&
+      if ((!_imageUrlController.text.startsWith('http') &&
               !_imageUrlController.text.startsWith('https')) ||
           (!_imageUrlController.text.endsWith('.png') &&
               !_imageUrlController.text.endsWith('.jpg') &&
-              !_imageUrlController.text.endsWith('.jpeg')) ) {
+              !_imageUrlController.text.endsWith('.jpeg'))) {
         return;
       }
       setState(() {});
@@ -59,11 +61,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     //the code is run if isValid = true
     _form.currentState!.save();
-    print(_editedProduct.id);
-    print(_editedProduct.title);
-    print(_editedProduct.price);
-    print(_editedProduct.description);
-    print(_editedProduct.imageUrl);
+    Provider.of<ProductsProvider>(context, listen: false).addProduct(
+        _editedProduct); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
+    Navigator.of(context).pop();// go back to the previous page which shows us all products
   }
 
   @override
