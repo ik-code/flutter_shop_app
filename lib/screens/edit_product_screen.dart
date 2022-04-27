@@ -45,6 +45,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   void _saveForm() {
+    final isValid = _form.currentState!.validate();
+    if (!isValid) {
+      return; 
+    }
+
+    //the code is run if isValid = true
     _form.currentState!.save();
     print(_editedProduct.id);
     print(_editedProduct.title);
@@ -71,10 +77,18 @@ class _EditProductScreenState extends State<EditProductScreen> {
             key: _form,
             child: ListView(children: <Widget>[
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                ),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
                   FocusScope.of(context).requestFocus(_priceFocusNode);
+                },
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please provide a value';
+                  }
+                  return null; //If don't have an error
                 },
                 onSaved: (value) {
                   _editedProduct = Product(
