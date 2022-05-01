@@ -41,7 +41,7 @@ class ProductsProvider with ChangeNotifier {
     ),
   ]; //pointer to the memory
 
- // var _showFavoritesOnly = false;
+  // var _showFavoritesOnly = false;
 
   List<Product> get items {
     // if (_showFavoritesOnly) {
@@ -68,15 +68,18 @@ class ProductsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> addProduct(Product product) {
+  Future<void> addProduct(Product product) async {
     final url = Uri.parse(
-        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json');
+        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products');
 
 //http.post - Returns Future<Response> (To perform asynchronous operations in Dart, you can use the Future )
 
 // Return this whole block here becaus post returns a future and with then we
 // registered some code that should execute when that future resolves
-    return http.post(
+    // return removed because http.post will be return automatically
+
+  try{
+    final response = await http.post(
       url,
       body: json.encode({
         'title': product.title,
@@ -85,22 +88,24 @@ class ProductsProvider with ChangeNotifier {
         'price': product.price,
         'isFavorite': product.isFavorite,
       }),
-    )
-        .then((response) {
-      print(json.decode(response.body));
-      final newProduct = Product(
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          imageUrl: product.imageUrl,
-          id: json.decode(response.body)['name']);
-      _items.add(newProduct); //at the end of the list
-      // _items.insert(0, newProduct); // at the start of the list
-      notifyListeners();
-    }).catchError((error) {
-      print(error);
-      throw error;
-    });
+    );
+
+    print(json.decode(response.body));
+    final newProduct = Product(
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        imageUrl: product.imageUrl,
+        id: json.decode(response.body)['name']);
+    _items.add(newProduct); //at the end of the list
+    // _items.insert(0, newProduct); // at the start of the list
+    notifyListeners();
+
+  }catch(error){
+    print(error);
+    rethrow;
+  }
+
   }
 
   void updateProduct(String id, Product newProduct) {

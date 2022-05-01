@@ -84,7 +84,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
@@ -105,35 +105,36 @@ class _EditProductScreenState extends State<EditProductScreen> {
       });
       Navigator.of(context).pop();
     } else {
-      Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showDialog(
+      try {
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-              title: const Text(
-                'An error occurred!',
+            title: const Text(
+              'An error occurred!',
+            ),
+            content: const Text('Something went wrong.'),
+            actions: <Widget>[
+              FlatButton(
+                child: const Text('Okay'),
+                onPressed: () {
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  Navigator.of(ctx).pop();
+                },
               ),
-              content: const Text('Something went wrong.'),
-              actions: <Widget>[
-                FlatButton(
-                  child: const Text('Okay'),
-                  onPressed: () {
-                    setState(() {
-                      _isLoading = false;
-                    });
-                    Navigator.of(ctx).pop();
-                    Navigator.of(ctx).pop();
-                  },
-                ),
-              ],),
+            ],
+          ),
         );
-      }).then((_) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      }); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
+      }
     }
 
     // Navigator.of(context).pop(); // go back to the previous page which shows us all products
