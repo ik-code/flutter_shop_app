@@ -1,12 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import './product.dart';
-
-import 'package:http/http.dart' as http;
 
 class ProductsProvider with ChangeNotifier {
   final List<Product> _items = [
@@ -44,7 +41,7 @@ class ProductsProvider with ChangeNotifier {
     ),
   ]; //pointer to the memory
 
-  var _showFavoritesOnly = false;
+ // var _showFavoritesOnly = false;
 
   List<Product> get items {
     // if (_showFavoritesOnly) {
@@ -61,10 +58,10 @@ class ProductsProvider with ChangeNotifier {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
-  void showFavoritesOnly() {
-    _showFavoritesOnly = true;
-    notifyListeners();
-  }
+  // void showFavoritesOnly() {
+  //   _showFavoritesOnly = true;
+  //   notifyListeners();
+  // }
 
   // void showAll() {
   //   _showFavoritesOnly = false;
@@ -79,8 +76,7 @@ class ProductsProvider with ChangeNotifier {
 
 // Return this whole block here becaus post returns a future and with then we
 // registered some code that should execute when that future resolves
-  return  http
-        .post(
+    return http.post(
       url,
       body: json.encode({
         'title': product.title,
@@ -101,6 +97,9 @@ class ProductsProvider with ChangeNotifier {
       _items.add(newProduct); //at the end of the list
       // _items.insert(0, newProduct); // at the start of the list
       notifyListeners();
+    }).catchError((error) {
+      print(error);
+      throw error;
     });
   }
 
