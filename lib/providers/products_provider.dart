@@ -75,24 +75,30 @@ class ProductsProvider with ChangeNotifier {
     final url = Uri.parse(
         'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json');
 
-    http.post(url, body: json.encode({
+//http.post - Returns Future<Response> (To perform asynchronous operations in Dart, you can use the Future )
+    http
+        .post(
+      url,
+      body: json.encode({
         'title': product.title,
         'description': product.description,
         'imageUrl': product.imageUrl,
-         'price': product.price,
+        'price': product.price,
         'isFavorite': product.isFavorite,
-    }),);
-
-    final newProduct = Product(
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        id: DateTime.now().toString());
-
-    _items.add(newProduct); //at the end of the list
-    // _items.insert(0, newProduct); // at the start of the list
-    notifyListeners();
+      }),
+    )
+        .then((response) {
+      print(json.decode(response.body));
+      final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          id: json.decode(response.body)['name']);
+      _items.add(newProduct); //at the end of the list
+      // _items.insert(0, newProduct); // at the start of the list
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
