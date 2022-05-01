@@ -68,7 +68,7 @@ class ProductsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchAndSetProduct() async {
+  Future<void> fetchAndSetProducts() async {
     final url = Uri.parse(
         'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json');
     try {

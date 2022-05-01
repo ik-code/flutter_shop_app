@@ -57,7 +57,7 @@ class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
 
  
       // don't use async await here but here, I will use the old approch with then
-      Provider.of<ProductsProvider>(context).fetchAndSetProduct().then((_) {
+      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
 
         setState(() {
             _isLoading = false;
