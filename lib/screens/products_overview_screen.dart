@@ -7,6 +7,8 @@ import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
 import 'package:flutter_shop_app/providers/cart_provider.dart';
 
+import '../providers/products_provider.dart';
+
 enum FilterOptions {
   favorites,
   all,
@@ -21,6 +23,38 @@ class ProductOverviewScreeen extends StatefulWidget {
 
 class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
   var _showOnlyFavorites = false;
+
+//for didChangeDependencies approach
+  var _isInit = true;
+
+  @override
+  void initState() {
+    // Perfect scenario for fetch data
+    // Provider.of<ProductsProvider>(context).fetchAndSetProduct(); // WONT'T WORK!
+
+    // This would work but it's kind of a hack, though you can absolutely also
+    // use this approach.
+    // Future.delayed(Duration.zero).then((_) {
+    //   Provider.of<ProductsProvider>(context).fetchAndSetProduct();
+    // });
+    //ModalRoute.of(context)
+    super.initState();
+  }
+
+  //other approach
+  // When using this approach, you should have another helper variable or property
+  // like isInit
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      Provider.of<ProductsProvider>(context).fetchAndSetProduct();
+      //it's working.Look at DEBUG CONSOLE We get a printed Response from Server Firebase
+    }
+
+    // That this never runs again 
+    _isInit = false;
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {

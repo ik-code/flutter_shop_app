@@ -68,9 +68,20 @@ class ProductsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  Future<void> fetchAndSetProduct() async {
+    final url = Uri.parse(
+        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json');
+    try {
+      final response = await http.get(url);
+      print(response.body);
+    } catch (error) {
+      rethrow;
+    }
+  }
+
   Future<void> addProduct(Product product) async {
     final url = Uri.parse(
-        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products');
+        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json'); //fixed
 
 //http.post - Returns Future<Response> (To perform asynchronous operations in Dart, you can use the Future )
 
@@ -78,34 +89,32 @@ class ProductsProvider with ChangeNotifier {
 // registered some code that should execute when that future resolves
     // return removed because http.post will be return automatically
 
-  try{
-    final response = await http.post(
-      url,
-      body: json.encode({
-        'title': product.title,
-        'description': product.description,
-        'imageUrl': product.imageUrl,
-        'price': product.price,
-        'isFavorite': product.isFavorite,
-      }),
-    );
+    try {
+      final response = await http.post(
+        url,
+        body: json.encode({
+          'title': product.title,
+          'description': product.description,
+          'imageUrl': product.imageUrl,
+          'price': product.price,
+          'isFavorite': product.isFavorite,
+        }),
+      );
 
-    print(json.decode(response.body));
-    final newProduct = Product(
-        title: product.title,
-        description: product.description,
-        price: product.price,
-        imageUrl: product.imageUrl,
-        id: json.decode(response.body)['name']);
-    _items.add(newProduct); //at the end of the list
-    // _items.insert(0, newProduct); // at the start of the list
-    notifyListeners();
-
-  }catch(error){
-    print(error);
-    rethrow;
-  }
-
+      print(json.decode(response.body));
+      final newProduct = Product(
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          id: json.decode(response.body)['name']);
+      _items.add(newProduct); //at the end of the list
+      // _items.insert(0, newProduct); // at the start of the list
+      notifyListeners();
+    } catch (error) {
+      print(error);
+      rethrow;
+    }
   }
 
   void updateProduct(String id, Product newProduct) {
