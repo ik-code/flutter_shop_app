@@ -26,6 +26,7 @@ class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
 
 //for didChangeDependencies approach
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -47,11 +48,26 @@ class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      Provider.of<ProductsProvider>(context).fetchAndSetProduct();
+
+      setState(() {
+        //update the UI
+             _isLoading = true;
+            
+      });
+
+ 
+      // don't use async await here but here, I will use the old approch with then
+      Provider.of<ProductsProvider>(context).fetchAndSetProduct().then((_) {
+
+        setState(() {
+            _isLoading = false;
+        });
+
+      });
       //it's working.Look at DEBUG CONSOLE We get a printed Response from Server Firebase
     }
 
-    // That this never runs again 
+    // That this never runs again
     _isInit = false;
     super.didChangeDependencies();
   }
@@ -103,7 +119,9 @@ class _ProductOverviewScreeenState extends State<ProductOverviewScreeen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: ProductsGrid(_showOnlyFavorites),
+      body: _isLoading
+      ? Center(child: CircularProgressIndicator(),)
+      : ProductsGrid(_showOnlyFavorites),
     );
   }
 }
