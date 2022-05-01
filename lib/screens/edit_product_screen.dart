@@ -29,6 +29,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     'imageUrl': ''
   };
   var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
@@ -91,15 +92,34 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     //the code is run if isValid = true
     _form.currentState!.save();
+
+    setState(() {
+      _isLoading = true;
+    });
+
     if (_editedProduct.id != '') {
-      Provider.of<ProductsProvider>(context, listen: false).updateProduct(_editedProduct.id ,_editedProduct);
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+
+      setState(() {
+        _isLoading = false;
+      });
+
+      Navigator.of(context).pop();
     } else {
-      Provider.of<ProductsProvider>(context, listen: false).addProduct(
-          _editedProduct); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(_editedProduct)
+          .then((_) {
+
+        setState(() {
+          _isLoading = true;
+        });
+
+        Navigator.of(context).pop();
+      }); //listen to false here because here, I'm not interested in changes to my products. I just want to dispatch an action , I want to call add product, and there, forward my edited product
     }
 
-    Navigator.of(context)
-        .pop(); // go back to the previous page which shows us all products
+    // Navigator.of(context).pop(); // go back to the previous page which shows us all products
   }
 
   @override
@@ -114,7 +134,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ),
           ],
         ),
-        body: Padding(
+        body: _isLoading 
+        ? const Center(child: CircularProgressIndicator(),) 
+        :  Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _form,

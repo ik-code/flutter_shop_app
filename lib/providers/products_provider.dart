@@ -71,12 +71,15 @@ class ProductsProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  void addProduct(Product product) {
+  Future<void> addProduct(Product product) {
     final url = Uri.parse(
         'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products.json');
 
 //http.post - Returns Future<Response> (To perform asynchronous operations in Dart, you can use the Future )
-    http
+
+// Return this whole block here becaus post returns a future and with then we
+// registered some code that should execute when that future resolves
+  return  http
         .post(
       url,
       body: json.encode({
