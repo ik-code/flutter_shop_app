@@ -154,7 +154,7 @@ class ProductsProvider with ChangeNotifier {
   //using Optimistic Updating Pattern
   void deleteProduct(String id) async {
     final url = Uri.parse(
-        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products/$id');
+        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products/$id.json');//fixed
    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
