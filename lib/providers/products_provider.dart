@@ -1,11 +1,12 @@
 
 import 'dart:convert';
-import 'dart:io';
+
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 import './product.dart';
+import '../models/http_exception.dart';
 
 class ProductsProvider with ChangeNotifier {
   List<Product> _items = [
@@ -152,9 +153,9 @@ class ProductsProvider with ChangeNotifier {
   }
 
   //using Optimistic Updating Pattern
-  void deleteProduct(String id) async {
+  Future<void> deleteProduct(String id) async {
     final url = Uri.parse(
-        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products/$id.json');//fixed
+        'https://flutter-shop-db-realtime-default-rtdb.firebaseio.com/products/$id');//fixed
    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
     Product? existingProduct = _items[existingProductIndex];
     _items.removeAt(existingProductIndex);
@@ -163,7 +164,7 @@ class ProductsProvider with ChangeNotifier {
     if (response.statusCode >= 400) {
       _items.insert(existingProductIndex, existingProduct);
       notifyListeners();
-      throw const HttpException('Could not delete product.');
+      throw HttpException('Could not delete product.');
     }
     existingProduct = null;
   }
